@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TicketReservationApp</string>
+    <string name="button_text">Custom name for button</string>
+</resources>
