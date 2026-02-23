@@ -1,4 +1,35 @@
 <resources>
     <string name="app_name">TicketReservationApp</string>
-    <string name="button_text">Custom name for button</string>
+    <string name="button_text">Register</string>
+
+    <!-- Registration screen -->
+    <string name="register_title">Create Your Account</string>
+    <string name="register_subtitle">Join us to start booking tickets</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_identifier">Email or Phone (+1XXXXXXXXXX)</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="label_role">I am a:</string>
+    <string name="role_customer">Customer</string>
+    <string name="role_organizer">Event Organizer</string>
+    <string name="btn_register">Sign Up</string>
+    <string name="link_login">Already have an account? <b>Login</b></string>
+    <string name="registration_success">Account created successfully! Welcome aboard.</string>
+
+    <!-- Login screen -->
+    <string name="login_title">Welcome Back</string>
+    <string name="login_subtitle">Sign in to your account</string>
+    <string name="btn_login">Login</string>
+    <string name="link_forgot_password">Forgot password?</string>
+    <string name="btn_create_account">Create Account</string>
+
+    <!-- OTP / phone verification screen -->
+    <string name="otp_title">Verify Your Number</string>
+    <string name="otp_subtitle">We sent a 6-digit code to %1$s</string>
+    <string name="hint_otp">6-digit code</string>
+    <string name="btn_verify">Verify</string>
+    <string name="link_resend">Resend code</string>
+
+    <!-- Home screen -->
+    <string name="btn_sign_out">Sign Out</string>
 </resources>

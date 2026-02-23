@@ -2,4 +2,22 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Brand palette -->
+    <color name="brand_primary">#2563EB</color>
+    <color name="brand_primary_dark">#1E40AF</color>
+    <color name="brand_accent">#14B8A6</color>
+
+    <!-- Surfaces -->
+    <color name="bg_surface">#F8FAFC</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="border_color">#E2E8F0</color>
+
+    <!-- Text -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#64748B</color>
+
+    <!-- Semantic -->
+    <color name="color_success">#16A34A</color>
+    <color name="color_error">#DC2626</color>
 </resources>
