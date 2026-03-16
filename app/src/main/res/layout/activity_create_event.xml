@@ -11,13 +11,27 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Flat primary header -->
-        <View
+        <!-- Flat primary header with back arrow -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:background="@color/brand_primary" />
+            android:background="@color/brand_primary">
 
-        <!-- Form card overlaps the gradient -->
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_gravity="start|top"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/btn_back"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@android:color/white" />
+
+        </FrameLayout>
+
+        <!-- Form card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,59 +55,42 @@
                     android:layout_height="56dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="12dp"
-                    android:src="@drawable/ticket_logo"
-                    android:contentDescription="@string/app_name" />
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ticket_logo" />
 
                 <!-- Title -->
                 <TextView
+                    android:id="@+id/tv_form_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/register_title"
+                    android:text="@string/create_event_title"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:textColor="@color/text_primary"
                     android:textStyle="bold" />
 
                 <!-- Subtitle -->
                 <TextView
+                    android:id="@+id/tv_form_subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="24dp"
-                    android:text="@string/register_subtitle"
+                    android:text="@string/create_event_subtitle"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="@color/text_secondary" />
 
-                <!-- Full Name -->
+                <!-- Event Title -->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_full_name"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:hint="@string/hint_full_name">
+                    android:hint="@string/hint_event_title">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_full_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName|textCapWords"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Email or Phone (single identifier field) -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_identifier"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:hint="@string/hint_identifier">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_identifier"
+                        android:id="@+id/et_event_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
@@ -101,88 +98,124 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Password -->
+                <!-- Description -->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_password"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:hint="@string/hint_password"
-                    app:endIconMode="password_toggle">
+                    android:hint="@string/hint_event_description">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_password"
+                        android:id="@+id/et_event_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
+                        android:inputType="textMultiLine"
+                        android:minLines="3"
+                        android:gravity="top" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Confirm Password -->
+                <!-- Date -->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_confirm_password"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:hint="@string/hint_confirm_password"
-                    app:endIconMode="password_toggle">
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/hint_event_date">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_confirm_password"
+                        android:id="@+id/et_event_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword"
+                        android:inputType="none"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Role label -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/label_role"
-                    android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="@color/text_secondary" />
-
-                <!-- Role toggle -->
-                <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/toggle_role"
+                <!-- Location -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    app:checkedButton="@id/btn_customer"
-                    app:selectionRequired="true"
-                    app:singleSelection="true">
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/hint_event_location">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_customer"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_event_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Category dropdown -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/hint_event_category">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinner_event_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Price and Seats in a row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/role_customer" />
+                        android:layout_marginEnd="8dp"
+                        android:hint="@string/hint_event_price">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_organizer"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_event_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/role_organizer" />
+                        android:layout_marginStart="8dp"
+                        android:hint="@string/hint_event_seats">
 
-                </com.google.android.material.button.MaterialButtonToggleGroup>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_event_seats"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLines="1" />
 
-                <!-- Sign Up button -->
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <!-- Create button -->
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_register"
+                    android:id="@+id/btn_create_event"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
-                    android:text="@string/btn_register" />
+                    android:text="@string/btn_create_event" />
 
                 <!-- Progress indicator -->
                 <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -192,19 +225,6 @@
                     android:layout_marginTop="8dp"
                     android:indeterminate="true"
                     android:visibility="gone" />
-
-                <!-- Login link -->
-                <TextView
-                    android:id="@+id/tv_login_link"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="@string/link_login"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                    android:textColor="@color/text_secondary" />
 
             </LinearLayout>
 

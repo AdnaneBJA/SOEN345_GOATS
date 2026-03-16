@@ -3,21 +3,29 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Brand palette -->
+    <!-- Primary -->
     <color name="brand_primary">#2563EB</color>
     <color name="brand_primary_dark">#1E40AF</color>
-    <color name="brand_accent">#14B8A6</color>
+    <color name="primary_container">#DBEAFE</color>
 
-    <!-- Surfaces -->
+    <!-- Secondary -->
+    <color name="brand_accent">#14B8A6</color>
+    <color name="secondary_container">#CCFBF1</color>
+
+    <!-- Background / Surface -->
     <color name="bg_surface">#F8FAFC</color>
     <color name="bg_card">#FFFFFF</color>
+    <color name="surface_variant">#F1F5F9</color>
     <color name="border_color">#E2E8F0</color>
 
     <!-- Text -->
     <color name="text_primary">#0F172A</color>
-    <color name="text_secondary">#64748B</color>
+    <color name="text_secondary">#475569</color>
+    <color name="text_disabled">#94A3B8</color>
 
-    <!-- Semantic -->
+    <!-- Status -->
     <color name="color_success">#16A34A</color>
+    <color name="color_warning">#F59E0B</color>
     <color name="color_error">#DC2626</color>
+    <color name="color_info">#0EA5E9</color>
 </resources>
