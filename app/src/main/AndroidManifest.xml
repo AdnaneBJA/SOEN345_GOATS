@@ -37,6 +37,22 @@
             android:name=".MainActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".view.EventListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.EventDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.CreateEventActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.MyEventsActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

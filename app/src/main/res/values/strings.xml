@@ -32,4 +32,70 @@
 
     <!-- Home screen -->
     <string name="btn_sign_out">Sign Out</string>
+    <string name="btn_browse_events">Browse Events</string>
+    <string name="btn_create_event">Create Event</string>
+
+    <!-- Event list screen -->
+    <string name="events_title">Discover Events</string>
+    <string name="events_subtitle">Browse movies, concerts, travel &amp; sports</string>
+    <string name="hint_search_events">Search events…</string>
+    <string name="filter_category">Category</string>
+    <string name="filter_date">Date</string>
+    <string name="filter_clear">Clear</string>
+    <string name="no_events_found">No events found.</string>
+    <string name="label_date_icon">Date:</string>
+    <string name="label_location_icon">Location:</string>
+    <string name="label_price_icon">Price:</string>
+    <string name="label_seats_icon">Seats:</string>
+
+    <!-- Event detail screen -->
+    <string name="label_description">About this event</string>
+    <string name="organized_by">Organized by %1$s</string>
+    <string name="seats_available">%1$d / %2$d seats available</string>
+    <string name="btn_back">Back</string>
+
+    <!-- Create event screen -->
+    <string name="create_event_title">Create Event</string>
+    <string name="create_event_subtitle">Fill in the details for your event</string>
+    <string name="hint_event_title">Event Title</string>
+    <string name="hint_event_description">Description</string>
+    <string name="hint_event_date">Date</string>
+    <string name="hint_event_location">Location</string>
+    <string name="hint_event_category">Category</string>
+    <string name="hint_event_price">Price ($)</string>
+    <string name="hint_event_seats">Total Seats</string>
+    <string name="event_created_success">Event created successfully!</string>
+    <string name="event_updated_success">Event updated successfully!</string>
+    <string name="event_cancelled_success">Event cancelled successfully.</string>
+
+    <!-- Edit event screen -->
+    <string name="edit_event_title">Edit Event</string>
+    <string name="edit_event_subtitle">Update your event details</string>
+    <string name="btn_update_event">Update Event</string>
+    <string name="btn_edit_event">Edit Event</string>
+    <string name="btn_cancel_event">Cancel Event</string>
+
+    <!-- My events screen -->
+    <string name="btn_my_events">My Events</string>
+    <string name="my_events_title">My Events</string>
+    <string name="my_events_subtitle">Manage your created events</string>
+    <string name="no_my_events_found">You haven\'t created any events yet.</string>
+
+    <!-- Event actions -->
+    <string name="action_view">View Details</string>
+    <string name="action_edit">Edit Event</string>
+    <string name="action_cancel_event">Cancel Event</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_no">No</string>
+    <string name="cancel_event_dialog_title">Cancel Event</string>
+    <string name="cancel_event_dialog_message">Are you sure you want to cancel \"%1$s\"? This action cannot be undone.</string>
+
+    <!-- Category array for filter dropdown -->
+    <string-array name="event_categories">
+        <item>All Categories</item>
+        <item>Movies</item>
+        <item>Concerts</item>
+        <item>Travel</item>
+        <item>Sports</item>
+    </string-array>
 </resources>

@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Gradient header banner -->
+        <!-- Flat primary header -->
         <View
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:background="@drawable/bg_gradient_header" />
+            android:background="@color/brand_primary" />
 
         <!-- Form card overlaps the gradient -->
         <com.google.android.material.card.MaterialCardView
@@ -41,7 +41,7 @@
                     android:layout_height="56dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="12dp"
-                    android:src="@mipmap/ic_launcher_round"
+                    android:src="@drawable/ticket_logo"
                     android:contentDescription="@string/app_name" />
 
                 <!-- Title -->
