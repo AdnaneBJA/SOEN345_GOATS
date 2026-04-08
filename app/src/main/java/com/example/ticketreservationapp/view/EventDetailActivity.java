@@ -2,7 +2,9 @@ package com.example.ticketreservationapp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,7 +14,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ticketreservationapp.R;
+import com.example.ticketreservationapp.model.Reservation;
 import com.example.ticketreservationapp.repository.EventRepository;
+import com.example.ticketreservationapp.repository.ReservationRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -64,6 +68,7 @@ public class EventDetailActivity extends AppCompatActivity {
         TextView tvOrganizer = findViewById(R.id.tv_detail_organizer);
         MaterialButton btnEdit = findViewById(R.id.btn_edit_event);
         MaterialButton btnCancel = findViewById(R.id.btn_cancel_event);
+        MaterialButton btnReserve = findViewById(R.id.btn_reserve_ticket);
 
         tvTitle.setText(eventTitle);
         tvDate.setText(eventDate);
@@ -74,17 +79,95 @@ public class EventDetailActivity extends AppCompatActivity {
         tvPrice.setText(String.format(Locale.US, "$%.2f", eventPrice));
         tvSeats.setText(getString(R.string.seats_available, eventAvailableSeats, eventTotalSeats));
 
-        // Show edit/cancel buttons only if current user is the organizer
+        // Show edit/cancel buttons only if current user is the organizer; otherwise show Reserve.
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null && eventOrganizerId != null
-                && currentUser.getUid().equals(eventOrganizerId)) {
+        boolean isOrganizer = currentUser != null && eventOrganizerId != null
+                && currentUser.getUid().equals(eventOrganizerId);
+        if (isOrganizer) {
             btnEdit.setVisibility(View.VISIBLE);
             btnCancel.setVisibility(View.VISIBLE);
+        } else if (currentUser != null) {
+            btnReserve.setVisibility(View.VISIBLE);
         }
 
         btnEdit.setOnClickListener(v -> openEditEvent());
         btnCancel.setOnClickListener(v -> confirmCancelEvent());
+        btnReserve.setOnClickListener(v -> showReserveDialog());
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
+    }
+
+    private void showReserveDialog() {
+        if (eventAvailableSeats <= 0) {
+            Toast.makeText(this, R.string.error_no_seats, Toast.LENGTH_LONG).show();
+            return;
+        }
+        EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setHint(R.string.hint_number_of_tickets);
+        int padding = (int) (16 * getResources().getDisplayMetrics().density);
+        input.setPadding(padding, padding, padding, padding);
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.reserve_dialog_title)
+                .setMessage(getString(R.string.reserve_dialog_message, eventAvailableSeats))
+                .setView(input)
+                .setPositiveButton(R.string.action_reserve, (dialog, which) -> {
+                    String text = input.getText().toString().trim();
+                    int qty;
+                    try {
+                        qty = Integer.parseInt(text);
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(this, R.string.error_invalid_ticket_count, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (qty <= 0) {
+                        Toast.makeText(this, R.string.error_invalid_ticket_count, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (qty > eventAvailableSeats) {
+                        Toast.makeText(this, R.string.error_no_seats, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    submitReservation(qty);
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
+    }
+
+    private void submitReservation(int qty) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+        new ReservationRepository().reserveTicket(currentUser.getUid(), eventId, qty,
+                new ReservationRepository.ReservationCallback() {
+                    @Override
+                    public void onSuccess(Reservation reservation) {
+                        eventAvailableSeats -= qty;
+                        TextView tvSeats = findViewById(R.id.tv_detail_seats);
+                        tvSeats.setText(getString(R.string.seats_available,
+                                eventAvailableSeats, eventTotalSeats));
+                        showConfirmation(reservation);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(EventDetailActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void showConfirmation(Reservation r) {
+        String message = getString(R.string.reservation_success_message,
+                r.getEventTitle(),
+                r.getNumberOfTickets(),
+                r.getTotalPrice(),
+                r.getEventDate(),
+                r.getEventLocation(),
+                r.getConfirmationCode());
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.reservation_success_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.action_ok, null)
+                .show();
     }
 
     private void openEditEvent() {

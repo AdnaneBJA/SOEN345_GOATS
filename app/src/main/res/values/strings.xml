@@ -90,6 +90,29 @@
     <string name="cancel_event_dialog_title">Cancel Event</string>
     <string name="cancel_event_dialog_message">Are you sure you want to cancel \"%1$s\"? This action cannot be undone.</string>
 
+    <!-- Reservation -->
+    <string name="btn_reserve_ticket">Reserve Ticket</string>
+    <string name="btn_my_reservations">My Reservations</string>
+    <string name="reserve_dialog_title">Reserve Tickets</string>
+    <string name="reserve_dialog_message">How many tickets would you like to reserve? (Available: %1$d)</string>
+    <string name="hint_number_of_tickets">Number of tickets</string>
+    <string name="action_reserve">Reserve</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="reservation_success_title">Reservation Confirmed</string>
+    <string name="reservation_success_message">Your reservation for \"%1$s\" is confirmed.\n\nTickets: %2$d\nTotal: $%3$.2f\nDate: %4$s\nLocation: %5$s\n\nConfirmation code: %6$s\n\nA confirmation has been sent to your email.</string>
+    <string name="reservation_cancelled_success">Reservation cancelled successfully.</string>
+    <string name="cancel_reservation_dialog_title">Cancel Reservation</string>
+    <string name="cancel_reservation_dialog_message">Are you sure you want to cancel your reservation for \"%1$s\"?</string>
+    <string name="my_reservations_title">My Reservations</string>
+    <string name="my_reservations_subtitle">View and manage your bookings</string>
+    <string name="no_reservations_found">You have no reservations yet.</string>
+    <string name="btn_cancel_reservation">Cancel Reservation</string>
+    <string name="tickets_count">Tickets: %1$d</string>
+    <string name="confirmation_code_label">Code: %1$s</string>
+    <string name="error_invalid_ticket_count">Please enter a valid number of tickets</string>
+    <string name="error_no_seats">Not enough seats available</string>
+    <string name="action_ok">OK</string>
+
     <!-- Category array for filter dropdown -->
     <string-array name="event_categories">
         <item>All Categories</item>

@@ -32,6 +32,15 @@
         android:text="@string/btn_browse_events" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_my_reservations"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:minHeight="48dp"
+        android:text="@string/btn_my_reservations" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_create_event"
         style="@style/Widget.Material3.Button.TonalButton"
         android:layout_width="match_parent"
