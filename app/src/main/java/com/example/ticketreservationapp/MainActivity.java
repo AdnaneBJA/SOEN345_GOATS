@@ -14,6 +14,7 @@ import com.example.ticketreservationapp.view.CreateEventActivity;
 import com.example.ticketreservationapp.view.EventListActivity;
 import com.example.ticketreservationapp.view.LoginActivity;
 import com.example.ticketreservationapp.view.MyEventsActivity;
+import com.example.ticketreservationapp.view.MyReservationsActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnMyEvents.setOnClickListener(v ->
                 startActivity(new Intent(this, MyEventsActivity.class)));
+
+        findViewById(R.id.btn_my_reservations).setOnClickListener(v ->
+                startActivity(new Intent(this, MyReservationsActivity.class)));
 
         findViewById(R.id.btn_sign_out).setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
