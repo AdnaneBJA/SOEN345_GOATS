@@ -1,38 +1,68 @@
 package com.example.ticketreservationapp;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 
 import com.example.ticketreservationapp.repository.AuthRepository;
 import com.example.ticketreservationapp.viewmodel.OtpViewModel;
+import com.google.firebase.auth.PhoneAuthCredential;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class OtpViewModelTest {
+@ExtendWith(InstantTaskExecutorExtension.class)
+class OtpViewModelTest {
 
-    @Rule
-    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+    private static class FakeAuthRepository extends AuthRepository {
+        PhoneAuthCredential lastCredential;
+        String lastFullName;
+        String lastPhone;
+        String lastRole;
+        String lastMode;
+        int signInCalls = 0;
 
-    @Mock
-    private AuthRepository mockRepo;
+        boolean shouldSucceed = true;
+        String errorMessage = "boom";
+        boolean invokeCallback = true;
 
+        FakeAuthRepository() { super(null, null); }
+
+        @Override
+        public void signInWithPhoneCredential(PhoneAuthCredential credential,
+                                              String fullName, String phone, String role,
+                                              String mode, AuthCallback callback) {
+            signInCalls++;
+            lastCredential = credential;
+            lastFullName = fullName;
+            lastPhone = phone;
+            lastRole = role;
+            lastMode = mode;
+            if (!invokeCallback) return;
+            if (shouldSucceed) callback.onSuccess();
+            else callback.onError(errorMessage);
+        }
+
+        @Override
+        public void loginWithEmail(String email, String password, AuthCallback callback) {}
+        @Override
+        public void registerWithEmail(String fullName, String email, String password,
+                                      String phone, String role, AuthCallback callback) {}
+        @Override
+        public void sendPasswordReset(String email, AuthCallback callback) {}
+    }
+
+    private FakeAuthRepository fakeRepo;
     private OtpViewModel viewModel;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        viewModel = new OtpViewModel(mockRepo);
+    @BeforeEach
+    void setUp() {
+        fakeRepo = new FakeAuthRepository();
+        viewModel = new OtpViewModel(fakeRepo);
     }
 
     private <T> List<T> collectValues(LiveData<T> liveData) {
@@ -41,94 +71,79 @@ public class OtpViewModelTest {
         return values;
     }
 
-    // ── verifyOtp: validation (does NOT call Firebase) ───────────────────────
+    // ── verifyOtp: validation ───────────────────────────────────────────────
 
     @Test
-    public void verifyOtp_nullCode_postsError() {
+    void verifyOtp_nullCode_postsError() {
         List<String> errors = collectValues(viewModel.getErrorMessage());
         viewModel.verifyOtp("verif-id", null, "John", "+15551234567", "customer", "register");
         assertEquals("Please enter the 6-digit code", errors.get(0));
     }
 
     @Test
-    public void verifyOtp_emptyCode_postsError() {
+    void verifyOtp_emptyCode_postsError() {
         List<String> errors = collectValues(viewModel.getErrorMessage());
         viewModel.verifyOtp("verif-id", "", "John", "+15551234567", "customer", "register");
         assertEquals("Please enter the 6-digit code", errors.get(0));
     }
 
     @Test
-    public void verifyOtp_fiveDigitCode_postsError() {
+    void verifyOtp_fiveDigitCode_postsError() {
         List<String> errors = collectValues(viewModel.getErrorMessage());
         viewModel.verifyOtp("verif-id", "12345", "John", "+15551234567", "customer", "register");
         assertEquals("Please enter the 6-digit code", errors.get(0));
     }
 
     @Test
-    public void verifyOtp_sevenDigitCode_postsError() {
+    void verifyOtp_sevenDigitCode_postsError() {
         List<String> errors = collectValues(viewModel.getErrorMessage());
         viewModel.verifyOtp("verif-id", "1234567", "John", "+15551234567", "customer", "register");
         assertEquals("Please enter the 6-digit code", errors.get(0));
     }
 
     @Test
-    public void verifyOtp_invalidCode_doesNotCallRepository() {
+    void verifyOtp_invalidCode_doesNotCallRepository() {
         viewModel.verifyOtp("verif-id", "123", "John", "+15551234567", "customer", "register");
-        verifyNoInteractions(mockRepo);
+        assertEquals(0, fakeRepo.signInCalls);
     }
 
     // ── signInWithCredential: repository interaction ─────────────────────────
 
     @Test
-    public void signInWithCredential_callsRepositoryWithCorrectArgs() {
+    void signInWithCredential_callsRepositoryWithCorrectArgs() {
         viewModel.signInWithCredential(null, "John", "+15551234567", "customer", "register");
-        verify(mockRepo).signInWithPhoneCredential(
-            isNull(), eq("John"), eq("+15551234567"), eq("customer"), eq("register"),
-            any(AuthRepository.AuthCallback.class)
-        );
+        assertEquals(1, fakeRepo.signInCalls);
+        assertNull(fakeRepo.lastCredential);
+        assertEquals("John", fakeRepo.lastFullName);
+        assertEquals("+15551234567", fakeRepo.lastPhone);
+        assertEquals("customer", fakeRepo.lastRole);
+        assertEquals("register", fakeRepo.lastMode);
     }
 
     @Test
-    public void signInWithCredential_setsLoadingTrue_beforeCallback() {
-        doAnswer(inv -> null)
-            .when(mockRepo).signInWithPhoneCredential(any(), any(), any(), any(), any(), any());
-
+    void signInWithCredential_setsLoadingTrue_beforeCallback() {
+        fakeRepo.invokeCallback = false;
         List<Boolean> loadingStates = collectValues(viewModel.getLoading());
         viewModel.signInWithCredential(null, "John", "+15551234567", "customer", "register");
-
-        assertTrue("Loading must be true before callback fires", loadingStates.contains(true));
+        assertTrue(loadingStates.contains(true), "Loading must be true before callback fires");
     }
 
     @Test
-    public void signInWithCredential_success_postsVerificationSuccessTrue() {
-        doAnswer(inv -> {
-            ((AuthRepository.AuthCallback) inv.getArgument(5)).onSuccess();
-            return null;
-        }).when(mockRepo).signInWithPhoneCredential(any(), any(), any(), any(), any(), any());
-
+    void signInWithCredential_success_postsVerificationSuccessTrue() {
         viewModel.signInWithCredential(null, "John", "+15551234567", "customer", "register");
-
         assertEquals(Boolean.TRUE, viewModel.getVerificationSuccess().getValue());
     }
 
     @Test
-    public void signInWithCredential_success_setsLoadingFalse() {
-        doAnswer(inv -> {
-            ((AuthRepository.AuthCallback) inv.getArgument(5)).onSuccess();
-            return null;
-        }).when(mockRepo).signInWithPhoneCredential(any(), any(), any(), any(), any(), any());
-
+    void signInWithCredential_success_setsLoadingFalse() {
         viewModel.signInWithCredential(null, "John", "+15551234567", "customer", "register");
-
         assertEquals(Boolean.FALSE, viewModel.getLoading().getValue());
     }
 
     @Test
-    public void signInWithCredential_error_postsErrorMessage() {
-        doAnswer(inv -> {
-            ((AuthRepository.AuthCallback) inv.getArgument(5)).onError("Invalid code.");
-            return null;
-        }).when(mockRepo).signInWithPhoneCredential(any(), any(), any(), any(), any(), any());
+    void signInWithCredential_error_postsErrorMessage() {
+        fakeRepo.shouldSucceed = false;
+        fakeRepo.errorMessage = "Invalid code.";
 
         List<String> errors = collectValues(viewModel.getErrorMessage());
         viewModel.signInWithCredential(null, "John", "+15551234567", "customer", "register");
@@ -137,11 +152,9 @@ public class OtpViewModelTest {
     }
 
     @Test
-    public void signInWithCredential_error_setsLoadingFalse() {
-        doAnswer(inv -> {
-            ((AuthRepository.AuthCallback) inv.getArgument(5)).onError("Error");
-            return null;
-        }).when(mockRepo).signInWithPhoneCredential(any(), any(), any(), any(), any(), any());
+    void signInWithCredential_error_setsLoadingFalse() {
+        fakeRepo.shouldSucceed = false;
+        fakeRepo.errorMessage = "Error";
 
         viewModel.signInWithCredential(null, "John", "+15551234567", "customer", "register");
 
@@ -149,11 +162,10 @@ public class OtpViewModelTest {
     }
 
     @Test
-    public void signInWithCredential_loginMode_passedToRepository() {
+    void signInWithCredential_loginMode_passedToRepository() {
         viewModel.signInWithCredential(null, null, "+15551234567", null, "login");
-        verify(mockRepo).signInWithPhoneCredential(
-            isNull(), isNull(), eq("+15551234567"), isNull(), eq("login"),
-            any(AuthRepository.AuthCallback.class)
-        );
+        assertEquals("login", fakeRepo.lastMode);
+        assertNull(fakeRepo.lastFullName);
+        assertNull(fakeRepo.lastRole);
     }
 }

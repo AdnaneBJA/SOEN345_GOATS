@@ -2,14 +2,14 @@ package com.example.ticketreservationapp;
 
 import com.example.ticketreservationapp.model.Reservation;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ReservationTest {
+class ReservationTest {
 
     @Test
-    public void defaultConstructor_createsEmptyInstance() {
+    void defaultConstructor_createsEmptyInstance() {
         Reservation r = new Reservation();
         assertNull(r.getId());
         assertNull(r.getUserId());
@@ -19,7 +19,7 @@ public class ReservationTest {
     }
 
     @Test
-    public void parameterizedConstructor_setsAllFields() {
+    void parameterizedConstructor_setsAllFields() {
         Reservation r = new Reservation(
                 "user1", "event1", "Concert", "2026-05-01",
                 "Montreal", 3, 150.0, 1234567890L, "ABC123");
@@ -36,7 +36,7 @@ public class ReservationTest {
     }
 
     @Test
-    public void setters_updateFields() {
+    void setters_updateFields() {
         Reservation r = new Reservation();
         r.setId("res1");
         r.setUserId("u1");
