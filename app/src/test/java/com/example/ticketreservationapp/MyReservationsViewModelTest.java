@@ -1,27 +1,24 @@
 package com.example.ticketreservationapp;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 
 import com.example.ticketreservationapp.model.Reservation;
 import com.example.ticketreservationapp.repository.ReservationRepository;
 import com.example.ticketreservationapp.viewmodel.MyReservationsViewModel;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MyReservationsViewModelTest {
-
-    @Rule
-    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+@ExtendWith(InstantTaskExecutorExtension.class)
+class MyReservationsViewModelTest {
 
     /** Hand-rolled fake — sidesteps Mockito/ByteBuddy JDK compatibility issues. */
     private static class FakeReservationRepository extends ReservationRepository {
@@ -63,8 +60,8 @@ public class MyReservationsViewModelTest {
     private FakeReservationRepository fakeRepo;
     private MyReservationsViewModel viewModel;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         fakeRepo = new FakeReservationRepository();
         viewModel = new MyReservationsViewModel(fakeRepo);
     }
@@ -78,7 +75,7 @@ public class MyReservationsViewModelTest {
     // loadReservations ─────────────────────────────────────────────────────
 
     @Test
-    public void loadReservations_callsRepositoryWithUserId() {
+    void loadReservations_callsRepositoryWithUserId() {
         fakeRepo.invokeCallback = false;
         viewModel.loadReservations("user1");
         assertEquals(1, fakeRepo.loadCalls);
@@ -86,7 +83,7 @@ public class MyReservationsViewModelTest {
     }
 
     @Test
-    public void loadReservations_setsLoadingTrueBeforeCallback() {
+    void loadReservations_setsLoadingTrueBeforeCallback() {
         fakeRepo.invokeCallback = false;
         List<Boolean> loadingStates = collectValues(viewModel.getLoading());
         viewModel.loadReservations("user1");
@@ -94,7 +91,7 @@ public class MyReservationsViewModelTest {
     }
 
     @Test
-    public void loadReservations_success_postsReservationsAndStopsLoading() {
+    void loadReservations_success_postsReservationsAndStopsLoading() {
         Reservation r = new Reservation(
                 "user1", "event1", "Show", "2026-05-01",
                 "Montreal", 2, 100.0, 1L, "CODE1");
@@ -107,7 +104,7 @@ public class MyReservationsViewModelTest {
     }
 
     @Test
-    public void loadReservations_emptySuccess_postsEmptyList() {
+    void loadReservations_emptySuccess_postsEmptyList() {
         fakeRepo.resultList = Collections.emptyList();
         viewModel.loadReservations("user1");
         assertNotNull(viewModel.getReservations().getValue());
@@ -115,7 +112,7 @@ public class MyReservationsViewModelTest {
     }
 
     @Test
-    public void loadReservations_error_postsErrorAndStopsLoading() {
+    void loadReservations_error_postsErrorAndStopsLoading() {
         fakeRepo.shouldSucceed = false;
         fakeRepo.errorMessage = "network down";
 
@@ -129,7 +126,7 @@ public class MyReservationsViewModelTest {
     // cancelReservation ────────────────────────────────────────────────────
 
     @Test
-    public void cancelReservation_callsRepositoryWithReservationId() {
+    void cancelReservation_callsRepositoryWithReservationId() {
         fakeRepo.invokeCallback = false;
         viewModel.cancelReservation("res1");
         assertEquals(1, fakeRepo.cancelCalls);
@@ -137,7 +134,7 @@ public class MyReservationsViewModelTest {
     }
 
     @Test
-    public void cancelReservation_setsLoadingTrueBeforeCallback() {
+    void cancelReservation_setsLoadingTrueBeforeCallback() {
         fakeRepo.invokeCallback = false;
         List<Boolean> loadingStates = collectValues(viewModel.getLoading());
         viewModel.cancelReservation("res1");
@@ -145,14 +142,14 @@ public class MyReservationsViewModelTest {
     }
 
     @Test
-    public void cancelReservation_success_postsCancelSuccessTrue() {
+    void cancelReservation_success_postsCancelSuccessTrue() {
         viewModel.cancelReservation("res1");
         assertEquals(Boolean.TRUE, viewModel.getCancelSuccess().getValue());
         assertEquals(Boolean.FALSE, viewModel.getLoading().getValue());
     }
 
     @Test
-    public void cancelReservation_error_postsErrorMessageAndStopsLoading() {
+    void cancelReservation_error_postsErrorMessageAndStopsLoading() {
         fakeRepo.shouldSucceed = false;
         fakeRepo.errorMessage = "Reservation not found";
 

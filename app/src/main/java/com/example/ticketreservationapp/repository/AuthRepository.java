@@ -10,8 +10,19 @@ public class AuthRepository {
         void onError(String message);
     }
 
-    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private final FirebaseAuth firebaseAuth;
+    private final FirebaseFirestore firestore;
+
+    public AuthRepository() {
+        this.firebaseAuth = FirebaseAuth.getInstance();
+        this.firestore = FirebaseFirestore.getInstance();
+    }
+
+    // Visible for unit testing — allows injecting null to avoid Firebase initialization
+    public AuthRepository(FirebaseAuth firebaseAuth, FirebaseFirestore firestore) {
+        this.firebaseAuth = firebaseAuth;
+        this.firestore = firestore;
+    }
 
     public void registerWithEmail(String fullName, String email, String password,
                                   String phone, String role, AuthCallback callback) {
