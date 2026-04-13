@@ -34,7 +34,6 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="btn_browse_events">Browse Events</string>
     <string name="btn_create_event">Create Event</string>
-
     <!-- Event list screen -->
     <string name="events_title">Discover Events</string>
     <string name="events_subtitle">Browse movies, concerts, travel &amp; sports</string>
@@ -80,7 +79,6 @@
     <string name="my_events_title">My Events</string>
     <string name="my_events_subtitle">Manage your created events</string>
     <string name="no_my_events_found">You haven\'t created any events yet.</string>
-
     <!-- Event actions -->
     <string name="action_view">View Details</string>
     <string name="action_edit">Edit Event</string>
@@ -89,7 +87,6 @@
     <string name="action_no">No</string>
     <string name="cancel_event_dialog_title">Cancel Event</string>
     <string name="cancel_event_dialog_message">Are you sure you want to cancel \"%1$s\"? This action cannot be undone.</string>
-
     <!-- Reservation -->
     <string name="btn_reserve_ticket">Reserve Ticket</string>
     <string name="btn_my_reservations">My Reservations</string>
